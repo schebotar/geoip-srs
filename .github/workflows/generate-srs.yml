@@ -1,6 +1,7 @@
 name: Generate SRS
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
