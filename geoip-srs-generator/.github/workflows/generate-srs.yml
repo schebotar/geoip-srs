@@ -1,0 +1,43 @@
+name: Generate SRS
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: 
+      - created
+
+jobs:
+  generate-srs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download geoip.dat
+        run: curl -L -o geoip.dat https://raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip.dat
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - name: Compile geodat2srs
+        run: |
+          git clone https://github.com/runetfreedom/geodat2srs.git
+          cd geodat2srs
+          go build -o geodat2srs
+
+      - name: Generate SRS rules
+        run: |
+          ./geodat2srs geoip -i ../geoip.dat -o ru --prefix "geoip-"
+
+      - name: Upload SRS file as release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: geoip-ru.srs
+          asset_name: geoip-ru.srs
+          asset_content_type: application/octet-stream
