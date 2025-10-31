@@ -33,7 +33,7 @@ jobs:
 
       - name: Generate SRS rules
         run: |
-          ./geodat2srs geoip -i ../geoip.dat -o ru --prefix "geoip-"
+          ./geodat2srs/geodat2srs geoip -i ../geoip.dat -o ru --prefix "geoip-"
 
       - name: Upload SRS file as release asset
         uses: actions/upload-release-asset@v1
