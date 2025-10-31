@@ -29,11 +29,12 @@ jobs:
         run: |
           git clone https://github.com/runetfreedom/geodat2srs.git
           cd geodat2srs
-          go build -o geodat2srs
+          go build -o ../geodat2srs
 
       - name: Generate SRS rules
         run: |
-          ./geodat2srs/geodat2srs geoip -i ./geoip.dat -o ru --prefix "geoip-"
+          cd ..
+          ./geodat2srs geoip -i ./geoip.dat -o ru --prefix "geoip-"
 
       - name: Upload SRS file as release asset
         uses: actions/upload-release-asset@v1
